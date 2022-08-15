@@ -14,21 +14,22 @@ Router.post('/start', (req, res) => {
   try {
     PM2.start(options, (err, apps) => {
       if (err) {
-        const error = err?.toString()
-        switch (error) {
-          case error.includes('No script path'): {
-            res.errors.push('No script path')
-          }
-        }
+        console.log(err)
+        res.status(500).json({
+          error: err.toString(),
+        })
       } else {
-        console.log(apps)
+        res.json({
+          apps,
+        })
       }
     })
-  } catch (err) {}
-
-  res.json({
-    errors: res.errors,
-  })
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({
+      error: err.toString(),
+    })
+  }
 })
 
 export default Router
